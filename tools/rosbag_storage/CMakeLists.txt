@@ -32,9 +32,21 @@ if(NOT WIN32)
   find_library(GPGME_LIBRARY
     NAMES "gpgme"
     PATHS /usr/local/lib)
-  find_library(CRYPTO_LIBRARY
-    NAMES "crypto"
-    PATHS /usr/local/lib)
+
+  if (APPLE)
+    include_directories(/usr/local/opt/openssl@3/include)
+    find_library(CRYPTO_LIBRARY
+      NAMES "crypto"
+      PATHS
+        /usr/local/lib
+        /usr/local/opt/openssl@3/lib)
+  else()
+    find_library(CRYPTO_LIBRARY
+      NAMES "crypto"
+      PATHS
+        /usr/local/lib)
+  endif()
+
   set(AES_ENCRYPT_LIBRARIES ${GPGME_LIBRARY} ${CRYPTO_LIBRARY})
 endif()
 
